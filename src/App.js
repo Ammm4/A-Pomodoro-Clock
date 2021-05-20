@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Break from './Break';
+import Session from './Session';
 import './App.css';
 var myTimer;
 
@@ -126,18 +127,15 @@ class App extends React.Component {
       <div className="App">
         
         <h1>My Pomodoro Clock</h1>
-        <h3 id="break-label">Break Duration</h3>
-        <div className='container1'>
-          <div id="break-decrement" onClick={this.decBreak}>-</div>
-          <div id="break-length">{this.state.breakLength}</div>
-          <div id="break-increment" onClick={this.incBreak}>+</div>
-        </div>
-        <h3 id="session-label">Session Duration</h3>
-        <div className='container2'>
-          <div id="session-decrement" onClick={this.decSession}>-</div>
-          <div id="session-length">{this.state.sessionLength}</div>
-          <div id="session-increment" onClick={this.incSession}>+</div>
-        </div>     
+        <Break decBreak={this.decBreak}
+               breakLength={this.state.breakLength}
+               incBreak={this.incBreak}
+        />
+        <Session decSession={this.decSession}
+                 sessionLength={this.state.sessionLength}
+                 incBreak={this.incSession}
+        />
+             
        <h2 id='timer-label'>{this.state.label}</h2>
         
     <div id='time-left'>{mm}:{this.state.secondLength}</div>
