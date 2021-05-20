@@ -1,9 +1,10 @@
 import React from 'react';
-import Break from './Break';
-import Session from './Session';
-import Countdown from './Countdown'
+import Countdown from './Countdown';
+import Buttons from './Buttons';
+import Event from './Event';
+import Audio from './Audio'
 import './App.css';
-var myTimer;
+
 
 class App extends React.Component {
   constructor(props) {
@@ -15,54 +16,38 @@ class App extends React.Component {
      secondLength: '00',
      sessionDisplay:25,
      breakDisplay:5,
-     stage: false
-    };
-    this.decBreak = this.decBreak.bind(this);
-    this.incBreak = this.incBreak.bind(this);
-    this.decSession = this.decSession.bind(this);
-    this.incSession = this.incSession.bind(this);
+     stage: false,
+     myTimer: null
+    }
+    this.audio = React.createRef();
     this.startStop = this.startStop.bind(this);
     this.reset = this.reset.bind(this);
     this.countdown = this.countdown.bind(this);
+    this.decreaseDuration = this.decreaseDuration.bind(this);
+    this.increaseDuration = this.increaseDuration.bind(this);
   }
-  decBreak(){
-   if(this.state.breakLength > 1){
-     this.setState({breakLength: this.state.breakLength -1, breakDisplay: this.state.breakDisplay-1})
-   }
-   return
+  decreaseDuration(type, type1){
+    if(this.state[type] > 1){
+      this.setState({[type]: this.state[type] - 1, [type1]: this.state[type1] - 1})
+    } 
   }
-  incBreak(){
-    if(this.state.breakLength < 60){
-      this.setState({breakLength: this.state.breakLength + 1,  breakDisplay: this.state.breakDisplay+1})
+  increaseDuration(type, type1){
+    if(this.state[type] < 60){
+      this.setState({[type]: this.state[type] + 1,  [type1]: this.state[type1] + 1})
     }
-    return
   }
-  decSession(){
-    if(this.state.sessionLength > 1){
-      this.setState({sessionLength: this.state.sessionLength -1,  sessionDisplay: this.state.sessionDisplay-1})
-     
-    }
-    return
-   }
-   incSession(){
-     if(this.state.sessionLength < 60){
-       this.setState({sessionLength: this.state.sessionLength + 1,  sessionDisplay: this.state.sessionDisplay + 1});
-       
-     }
-     return
-   }
    startStop(){
-     if(!this.state.stage){
+     if(!this.state.stage){ 
        this.setState({stage: true});
-       myTimer = setInterval(this.countdown, 1000);
+       let myTimer = setInterval(this.countdown, 1000);
+       this.setState({myTimer: myTimer})
      } else {
-      this.setState({stage: false});
-      clearInterval(myTimer)
-     }
-    
+       this.setState({stage: false});
+       clearInterval(this.state.myTimer)
+     } 
    }
    reset(){
-    clearInterval(myTimer);
+    clearInterval(this.state.myTimer);
      this.setState({
        label:'Session',
        breakLength: 5,
@@ -76,15 +61,15 @@ class App extends React.Component {
    }
     
    countdown(){
-    if(this.state.label === 'Session'){
-      if (this.state.sessionDisplay === 0 && this.state.secondLength === '00') {
-        this.setState({label:'Break', sessionDisplay: this.state.sessionLength})
-        this.audio.play();
-        return
-      }
-     if(this.state.secondLength === '00') { 
-       this.setState({secondLength: 59, sessionDisplay: this.state.sessionDisplay -1 });
-       
+    let label1 = this.state.label === 'Session' ? ['Break', 'sessionDisplay', 'sessionLength'] : ['Session', 'breakDisplay', 'breakLength'];
+    if (this.state[label1[1]] === 0 && this.state.secondLength === '00') {
+      console.log(label1[0])
+      this.setState({label: label1[0], [label1[1]]: this.state[label1[2]]})
+      this.audio.current.playAlarm();
+      return
+    } else {
+      if(this.state.secondLength === '00') { 
+       this.setState({secondLength: 59, [label1[1]]: this.state[label1[1]] - 1});  
       } else { 
         let ss = this.state.secondLength - 1;
         if(ss < 10) {
@@ -93,27 +78,8 @@ class App extends React.Component {
           this.setState({secondLength: ss});
         }
         }
-      } else {
-        if (this.state.breakDisplay === 0 && this.state.secondLength === '00') {
-          this.setState({label:'Session', breakDisplay: this.state.breakLength});
-          this.audio.play();
-          return
-        }
-        if(this.state.secondLength === '00') { 
-          this.setState({secondLength: 59, breakDisplay: this.state.breakDisplay -1 });
-        
-         } else { 
-           let ss = this.state.secondLength - 1;
-           if(ss < 10) {
-             this.setState({secondLength: '0' + ss});
-           } else {
-             this.setState({secondLength: ss});
-           }
-           }
-         
-      }
-        
-   }
+    }
+  }
   
   render(){
     let mm = this.state.label === 'Session' ? this.state.sessionDisplay : this.state.breakDisplay;
@@ -121,15 +87,21 @@ class App extends React.Component {
       return(
       <div className="App">  
         <h1>My Pomodoro Clock</h1>
-        <Break 
-          decBreak={this.decBreak}
-          breakLength={this.state.breakLength}
-          incBreak={this.incBreak}
+        <Event
+          durationType={'breakLength'}
+          durationDisplay={'breakDisplay'}
+          eventName={'Break Duration'}
+          decreaseDuration={this.decreaseDuration}
+          duration={this.state.breakLength}
+          increaseDuration={this.increaseDuration}
         />
-        <Session 
-          decSession={this.decSession}
-          sessionLength={this.state.sessionLength}
-          incBreak={this.incSession}
+        <Event 
+          durationType={'sessionLength'}
+          durationDisplay={'sessionDisplay'}
+          eventName={'Session Duration'}
+          decreaseDuration={this.decreaseDuration}
+          duration={this.state.sessionLength}
+          increaseDuration={this.increaseDuration}
         />
         <Countdown 
           label={this.state.label}
@@ -138,9 +110,16 @@ class App extends React.Component {
           startStop={this.startStop}
           reset={this.reset}
         />
-        <audio id='beep' ref={element => this.audio = element} src='http://soundbible.com/mp3/sos-morse-code_daniel-simion.mp3'/>   
-      </div>
-      
+        <Buttons 
+          startStop={this.startStop}
+          reset={this.reset}
+        />
+        <Audio 
+          ID={'beep'} 
+          src={'http://soundbible.com/mp3/sos-morse-code_daniel-simion.mp3'}
+          ref={this.audio}
+        />        
+      </div>      
     );
   }
 }

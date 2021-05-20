@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button'
 
 class Buttons extends React.Component {
   constructor(props) {
@@ -11,8 +12,8 @@ class Buttons extends React.Component {
   render() {
     return(
       <div className='container3'>
-        <div id='start_stop' onClick={this.handleClick}>Start/Stop</div>
-        <div id="reset" onClick={this.props.reset}>Reset</div>
+        <Button buttonId={'start_stop'} clickHandler={this.handleClick} buttonName={'Start/Stop'}/>
+        <Button buttonId={'reset'} clickHandler={this.props.reset} buttonName={'Reset'}/>
       </div>
     )
   }
