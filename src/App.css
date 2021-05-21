@@ -1,3 +1,8 @@
+*{
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
 body {
   background-color: #282c34;
   color: #61dafb;
@@ -9,52 +14,82 @@ body {
   justify-content: center;
   align-items: center;
 }
-.container1, .container2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 105px;
-  height: 35px;
-  margin: auto;
-  font-size: 20px;
+.App {
+  border: 3px solid #61dafb;
+  padding: 6px;
+  border-radius: 5px;
+  width: auto;
+  min-width: 300px;
 }
-.container1 > div, .container2 > div {
+h1{
+  position: relative;
+  margin-bottom: 1.3rem; 
+}
+h1::before {
+  content:'';
+  position: absolute;
+  height: 4px;
+  width:140px;
+  background-color: #61dafb;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+}
+h2{
+  padding-top: 0.5rem
+}
+h1,h2,h4{
+  letter-spacing: 1px;
+}
+.container1 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 125px;
+  height: 35px;
+  margin: 2rem auto;
+  font-size: 15px;
+}
+.container1 > div {
   width: 35px;
   height: 35px;
- background-color:crimson;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 #session-length, #break-length {
-  border:1px solid red;
+  border-radius: 2px;
 }
-#session-decrement, #break-decrement {
-  border-radius: 15px 0px 0px 15px;
+#session-decrement, #break-decrement, #session-increment, #break-increment {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
   cursor: default;
 }
-#session-increment, #break-increment {
-  border-radius: 0px 15px 15px 0px;
-  cursor: default;
+#timer-label {
+ border-top: 2px solid #61dafb;
+}
+.session-break-icon{
+  margin: 0.9rem auto;
 }
 #progress-bar {
-  height: 12px;
+  height: 11px;
   width: 170px;
   margin: 0 auto 25px auto;
   border-radius:8px;
-  border: 3px solid #61dafb
+  border: 2px solid #61dafb
 }
 #progress-bar .progress {
   width: 100%;
   height: 100%;
   border-radius:8px;
-  background-color: crimson; 
 }
 
 #time-left {
-  background-color: crimson;
-  width:120px;
   height: 60px;
+  width:130px;
   font-size: 40px;
   margin: auto;
   border-radius: 8px;
@@ -70,7 +105,10 @@ margin-top: 30px;
  display: flex;
  justify-content: center;
  width: 60px;
- background-color: crimson;
+ 
  border-radius: 8px;
  cursor: default;
+}
+.container3 > div, #time-left, #progress-bar .progress, .container1 > div {
+  background-color: crimson;
 }

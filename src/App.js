@@ -43,8 +43,9 @@ class App extends React.Component {
        let myTimer = setInterval(this.countdown, 1000);
        this.setState({myTimer: myTimer})
      } else {
-       this.setState({stage: false});
-       clearInterval(this.state.myTimer)
+       
+       clearInterval(this.state.myTimer);
+       this.setState({stage: false, myTimer:null});
      } 
    }
    reset(){
@@ -57,6 +58,7 @@ class App extends React.Component {
        sessionDisplay: 25,
        secondLength: '00',
        timeElapse:0,
+       myTimer:null,
        stage: false
      })
      
@@ -88,7 +90,7 @@ class App extends React.Component {
     if(mm < 10) {mm = '0' + mm};
       return(
       <div className="App">  
-        <h1>My Pomodoro Clock</h1>
+        <h1>Pomodoro Clock</h1>
         <Event
           durationType={'breakLength'}
           durationDisplay={'breakDisplay'}
@@ -118,6 +120,7 @@ class App extends React.Component {
           startStop={this.startStop}
           reset={this.reset}
         />
+        
         <Audio 
           ID={'beep'} 
           src={'http://soundbible.com/mp3/sos-morse-code_daniel-simion.mp3'}
