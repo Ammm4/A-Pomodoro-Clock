@@ -17,6 +17,7 @@ class App extends React.Component {
      sessionDisplay:25,
      breakDisplay:5,
      stage: false,
+     timeElapse: 0,
      myTimer: null
     }
     this.audio = React.createRef();
@@ -63,7 +64,6 @@ class App extends React.Component {
    countdown(){
     let label1 = this.state.label === 'Session' ? ['Break', 'sessionDisplay', 'sessionLength'] : ['Session', 'breakDisplay', 'breakLength'];
     if (this.state[label1[1]] === 0 && this.state.secondLength === '00') {
-      console.log(label1[0])
       this.setState({label: label1[0], [label1[1]]: this.state[label1[2]]})
       this.audio.current.playAlarm();
       return

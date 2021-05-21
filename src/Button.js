@@ -19,6 +19,7 @@ class Button extends React.Component {
         <i className="fas fa-minus"></i> : this.props.buttonName === 'plus' ?
         <i className="fas fa-plus"></i>  : <i className="fas fa-sync-alt"></i>
         }
+        {this.props.buttonName === 'Start/Stop' && <i className="fas fa-pause"></i>}
       </div>
     )
 }

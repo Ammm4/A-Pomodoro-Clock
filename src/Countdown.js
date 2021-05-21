@@ -10,8 +10,12 @@ class Countdown extends React.Component {
   }
   render() {
     return (<div>                      
-             <h2 id='timer-label'>{this.props.label}</h2>       
+             <h2 id='timer-label'>{this.props.label}</h2>
+             <div id='progress-bar'>
+               <div className='progress'></div>
+             </div>      
              <div id='time-left'>{this.props.mm}:{this.props.secondLength}</div>
+             
            </div>
            )
   }
